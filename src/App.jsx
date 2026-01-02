@@ -13,6 +13,7 @@ import StaffActiveTasks from "./pages/staff/StaffActiveTasks";
 import StaffMyFixes from "./pages/staff/StaffMyFixes";
 import StaffReportFix from "./pages/staff/StaffReportFix";
 import FleetMap from "./pages/staff/FleetMap";
+import StaffAnalytics from "./pages/staff/StaffAnalytics";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/staff/my-fixes" element={<StaffMyFixes />} />
           <Route path="/staff/report-fix" element={<StaffReportFix />} />
           <Route path="/staff/fleet-map" element={<FleetMap />} />
+          <Route path="/staff/analytics" element={<StaffAnalytics />} />
         </Routes>
       </div>
     </Router>

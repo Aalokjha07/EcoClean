@@ -170,7 +170,7 @@ const StaffDash = () => {
               </p>
               <div className="space-y-1">
                 <a
-                  href="#"
+                  href="/staff/analytics"
                   className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
                 >
                   Analytics
