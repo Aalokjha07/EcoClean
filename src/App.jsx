@@ -7,7 +7,7 @@ import IssueReport from "./pages/user/IssueReport";
 import MyReports from "./pages/user/MyReports";
 import AboutUs from "./pages/user/AboutUs";
 import Settings from "./pages/user/Settings";
-
+// staff
 import StaffDash from "./pages/staff/StaffDash";
 import StaffActiveTasks from "./pages/staff/StaffActiveTasks";
 import StaffMyFixes from "./pages/staff/StaffMyFixes";
@@ -15,6 +15,11 @@ import StaffReportFix from "./pages/staff/StaffReportFix";
 import FleetMap from "./pages/staff/FleetMap";
 import StaffAnalytics from "./pages/staff/StaffAnalytics";
 import StaffSettings from "./pages/staff/StaffSettings";
+// admin
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ActiveReports from "./pages/admin/ActiveReports";
+import ProcessedReports from "./pages/admin/ProcessedReports";
+import FixedReports from "./pages/admin/FixedReports";
 
 export default function App() {
   return (
@@ -36,6 +41,14 @@ export default function App() {
           <Route path="/staff/fleet-map" element={<FleetMap />} />
           <Route path="/staff/analytics" element={<StaffAnalytics />} />
           <Route path="/staff/settings" element={<StaffSettings />} />
+          {/* admin */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/active-reports" element={<ActiveReports />} />
+          <Route
+            path="/admin/processed-reports"
+            element={<ProcessedReports />}
+          />
+          <Route path="/admin/fixed-reports" element={<FixedReports />} />
         </Routes>
       </div>
     </Router>
