@@ -161,13 +161,13 @@ const StaffMyFixes = () => {
                   Analytics
                 </a>
                 <a
-                  href="/staff/analytics"
+                  href="/staff/settings"
                   className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
                 >
                   Staff Settings
                 </a>
                 <a
-                  href="#"
+                  href="/staff/support"
                   className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
                 >
                   Support

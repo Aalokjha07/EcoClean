@@ -169,7 +169,7 @@ const StaffAnalytics = () => {
                   Analytics
                 </Link>
                 <Link
-                  to="#"
+                  to="/staff/settings"
                   className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
                 >
                   Staff Settings
