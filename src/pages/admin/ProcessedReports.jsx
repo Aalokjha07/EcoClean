@@ -284,7 +284,7 @@ const ProcessedReports = () => {
 
                 <div className="mt-auto pt-6 border-t border-purple-50 flex gap-3">
                   <button className="flex-grow flex items-center justify-center gap-2 py-3 bg-purple-600 text-white rounded-xl font-black text-[10px] uppercase hover:bg-purple-700 transition-all shadow-lg shadow-purple-100">
-                    View Detail
+                    View Progress
                   </button>
                   <button className="w-12 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all border border-red-100">
                     <svg
