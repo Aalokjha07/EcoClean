@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Bell, Menu, X, MapPin, LogOut } from "lucide-react";
+import {
+  ArrowLeft,
+  Bell,
+  Menu,
+  X,
+  MapPin,
+  LogOut,
+  ChevronRight,
+  Eye,
+  Info,
+} from "lucide-react";
 
 const StaffActiveTasks = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [selectedTask, setSelectedTask] = useState(null); // State for Detail Modal
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -17,8 +28,9 @@ const StaffActiveTasks = () => {
       time: "2 mins ago",
       title: "Chemical Spill - Sector 9",
       description:
-        "Large container leak near the main drainage inlet. Immediate containment needed.",
-      location: "Block C",
+        "Large container leak near the main drainage inlet. Immediate containment needed. Avoid direct contact without Level 3 PPE.",
+      location: "Block C - Main Entrance",
+      reportedBy: "Sensor Unit 04",
     },
     {
       id: 2,
@@ -26,8 +38,10 @@ const StaffActiveTasks = () => {
       label: "Sanitation",
       time: "14 mins ago",
       title: "Overflowing Bin - Mall",
-      description: "Garbage bins at Gate 4 are full.",
+      description:
+        "Garbage bins at Gate 4 are full. Residents reporting odor issues. Requires standard waste disposal unit.",
       location: "Gate 4 Entrance",
+      reportedBy: "Citizen App",
     },
   ];
 
@@ -41,7 +55,7 @@ const StaffActiveTasks = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 hover:bg-slate-50 rounded-full transition-colors mr-1"
+            className="p-2 hover:bg-slate-50 rounded-full mr-1 transition-colors"
           >
             <ArrowLeft size={20} strokeWidth={2.5} />
           </button>
@@ -52,7 +66,6 @@ const StaffActiveTasks = () => {
             Staff
           </span>
         </div>
-
         <div className="flex items-center gap-1">
           <button className="p-2.5 hover:bg-slate-50 rounded-xl relative group transition-colors">
             <div className="w-2 h-2 bg-blue-600 rounded-full absolute top-2.5 right-2.5 border-2 border-white animate-pulse"></div>
@@ -73,99 +86,46 @@ const StaffActiveTasks = () => {
         </div>
       </nav>
 
-      {/* Side Menu Drawer */}
-      <div
-        className={`fixed inset-0 z-[60] transition-all duration-300 ${
-          isMenuOpen ? "visible" : "invisible"
-        }`}
-      >
-        <div
-          onClick={toggleMenu}
-          className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${
-            isMenuOpen ? "opacity-100" : "opacity-0"
-          }`}
-        ></div>
-        <div
-          className={`absolute top-0 right-0 bottom-0 w-72 bg-white shadow-2xl p-6 flex flex-col transition-transform duration-300 transform ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="font-extrabold text-lg text-slate-800">Menu</h2>
+      {/* Detail Modal Overlay */}
+      {selectedTask && (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-md rounded-[2.5rem] p-8 animate-in slide-in-from-bottom duration-300">
+            <div className="flex justify-between items-start mb-6">
+              <div className="bg-blue-50 p-3 rounded-2xl text-blue-600">
+                <Info size={24} />
+              </div>
+              <button
+                onClick={() => setSelectedTask(null)}
+                className="p-2 bg-slate-100 rounded-full text-slate-400"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <h3 className="text-xl font-black text-slate-900 mb-2">
+              {selectedTask.title}
+            </h3>
+            <div className="flex gap-2 mb-6">
+              <span className="text-[10px] font-black uppercase bg-slate-100 px-3 py-1 rounded-full text-slate-500">
+                {selectedTask.location}
+              </span>
+              <span className="text-[10px] font-black uppercase bg-blue-50 px-3 py-1 rounded-full text-blue-600">
+                {selectedTask.priority} Priority
+              </span>
+            </div>
+            <p className="text-slate-600 text-sm leading-relaxed mb-8">
+              {selectedTask.description}
+            </p>
             <button
-              onClick={toggleMenu}
-              className="text-slate-400 hover:text-slate-600"
+              onClick={() => navigate("/staff/report-fix")}
+              className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-blue-100"
             >
-              <X size={24} />
+              View Detail
             </button>
           </div>
-
-          <div className="space-y-8 flex-grow">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 ml-2">
-                Operations
-              </p>
-              <div className="space-y-1">
-                <Link
-                  to="/staff"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/staff/active-tasks"
-                  className="flex items-center gap-3 p-3 bg-blue-50 text-blue-600 rounded-2xl font-bold text-sm"
-                >
-                  Active Tasks
-                </Link>
-                <Link
-                  to="/staff/my-fixes"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  My Fixes
-                </Link>
-                <Link
-                  to="/staff/fleet-map"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Fleet Map
-                </Link>
-              </div>
-            </div>
-
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 ml-2">
-                Management
-              </p>
-              <div className="space-y-1">
-                <a
-                  href="/staff/analytics"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Analytics
-                </a>
-                <a
-                  href="/staff/settings"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Staff Settings
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Support
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <button className="mt-auto border-t border-slate-100 pt-6 flex items-center gap-3 p-3 text-red-500 font-bold text-sm hover:bg-red-50 rounded-2xl transition-colors">
-            <LogOut size={20} />
-            Logout System
-          </button>
         </div>
-      </div>
+      )}
+
+      {/* Side Menu Drawer Logic... */}
 
       <main className="p-6 w-full max-w-md space-y-6">
         <div className="px-2">
@@ -203,9 +163,9 @@ const StaffActiveTasks = () => {
           {filteredTasks.map((task) => (
             <div
               key={task.id}
-              className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm transition-all active:scale-[0.98] ${
+              className={`bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm transition-all ${
                 task.priority === "high"
-                  ? "border-l-4 border-l-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
+                  ? "border-l-4 border-l-blue-600 shadow-[0_4px_20px_rgba(59,130,246,0.08)]"
                   : ""
               }`}
             >
@@ -223,28 +183,40 @@ const StaffActiveTasks = () => {
                   {task.time}
                 </span>
               </div>
+
               <h3 className="text-base font-extrabold text-slate-900 leading-tight">
                 {task.title}
               </h3>
-              <p className="text-xs text-slate-500 mt-1 font-medium">
+              <p className="text-xs text-slate-500 mt-1 font-medium truncate">
                 {task.description}
               </p>
 
-              <div className="mt-4 flex items-center justify-between border-t border-slate-50 pt-4">
+              <div className="mt-4 flex flex-col gap-4 border-t border-slate-50 pt-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-xs text-slate-600">
-                    <MapPin size={14} />
-                  </div>
+                  <MapPin size={14} className="text-slate-400" />
                   <span className="text-[10px] font-bold text-slate-600 uppercase">
                     {task.location}
                   </span>
                 </div>
-                <button
-                  onClick={() => navigate("/report-fix")}
-                  className="bg-slate-900 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors"
-                >
-                  Process
-                </button>
+
+                <div className="flex gap-2">
+                  {/* NEW VIEW DETAIL BUTTON */}
+                  <button
+                    onClick={() => setSelectedTask(task)}
+                    className="flex-1 flex items-center justify-center gap-2 bg-slate-50 text-slate-600 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 transition-all border border-slate-100"
+                  >
+                    <Eye size={14} />
+                    View Detail
+                  </button>
+
+                  <button
+                    onClick={() => navigate("/staff/report-fix")}
+                    className="flex-1 flex items-center justify-center gap-2 bg-slate-900 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 active:scale-95 transition-all shadow-md"
+                  >
+                    Process
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}

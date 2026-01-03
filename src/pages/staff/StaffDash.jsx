@@ -7,16 +7,36 @@ const StaffDash = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Mock data for assigned tasks
+  const assignedTasks = [
+    {
+      id: 1,
+      title: "Waste Overflow",
+      location: "Market Square",
+      priority: "High",
+      time: "10 mins ago",
+      iconColor: "text-amber-500",
+      bgColor: "bg-amber-50",
+    },
+    {
+      id: 2,
+      title: "Pipe Leakage",
+      location: "Sector 4 Block B",
+      priority: "Medium",
+      time: "25 mins ago",
+      iconColor: "text-blue-500",
+      bgColor: "bg-blue-50",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-white font-['Plus_Jakarta_Sans'] flex flex-col items-center pb-10">
-      {/* Custom Styles Preserved from dash.html */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         
         .bento-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        
         .drawer-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .drawer-backdrop { transition: opacity 0.3s ease; }
 
@@ -45,16 +65,13 @@ const StaffDash = () => {
       {/* Navigation */}
       <nav className="w-full bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center gap-2">
-          <div className="flex flex-col -space-y-1">
-            <span className="text-xl font-extrabold text-slate-900 tracking-tighter">
-              EcoClean
-            </span>
-          </div>
+          <span className="text-xl font-extrabold text-slate-900 tracking-tighter">
+            EcoClean
+          </span>
           <span className="bg-blue-600 text-[10px] font-black text-white px-2 py-0.5 rounded-md uppercase tracking-wider">
             Staff
           </span>
         </div>
-
         <div className="flex items-center gap-1">
           <button className="p-2.5 hover:bg-slate-50 rounded-xl relative group transition-colors">
             <div className="w-2 h-2 bg-blue-600 rounded-full absolute top-2.5 right-2.5 border-2 border-white animate-pulse"></div>
@@ -96,7 +113,7 @@ const StaffDash = () => {
         </div>
       </nav>
 
-      {/* Side Menu Drawer */}
+      {/* Drawer (Unchanged) */}
       <div className={`fixed inset-0 z-[60] ${isMenuOpen ? "" : "invisible"}`}>
         <div
           onClick={toggleMenu}
@@ -131,7 +148,6 @@ const StaffDash = () => {
               </svg>
             </button>
           </div>
-
           <div className="space-y-8 flex-grow">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 ml-2">
@@ -164,33 +180,7 @@ const StaffDash = () => {
                 </a>
               </div>
             </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 ml-2">
-                Management
-              </p>
-              <div className="space-y-1">
-                <a
-                  href="/staff/analytics"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Analytics
-                </a>
-                <a
-                  href="/staff/settings"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Staff Settings
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-3 p-3 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold text-sm transition-colors"
-                >
-                  Support
-                </a>
-              </div>
-            </div>
           </div>
-
           <button className="mt-auto border-t border-slate-100 pt-6 flex items-center gap-3 p-3 text-red-500 font-bold text-sm hover:bg-red-50 rounded-2xl transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -236,7 +226,6 @@ const StaffDash = () => {
               </span>
             </div>
           </div>
-
           <div className="stat-card-hover bento-card bg-slate-50 p-6 rounded-[2.5rem] border border-slate-100 cursor-pointer transition-all">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Resolved
@@ -250,57 +239,84 @@ const StaffDash = () => {
           </div>
         </div>
 
-        {/* Active Tasks Card */}
-        <div
-          onClick={() => (window.location.href = "/staff/active-tasks")}
-          className="bento-card bg-slate-900 rounded-[3rem] p-7 overflow-hidden relative blue-shadow cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
-        >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[60px] rounded-full"></div>
-          <div className="relative z-10">
-            <h3 className="text-white text-lg font-extrabold tracking-tight mb-5 flex items-center justify-between">
-              <span>Active Tasks</span>
-              <span className="px-2 py-0.5 bg-blue-600 text-[9px] font-black rounded-full uppercase">
-                3 To Do
-              </span>
+        {/* RECENT ASSIGNED TASKS (Replaced Report Fix Button) */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between px-2">
+            <h3 className="font-extrabold text-slate-900 text-sm italic">
+              Recently Assigned Tasks
             </h3>
+            <a
+              href="/staff/active-tasks"
+              className="text-[10px] font-black text-blue-600 uppercase hover:underline"
+            >
+              View All
+            </a>
+          </div>
 
-            <div className="space-y-3">
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-between">
-                <div>
-                  <p className="text-blue-50 text-[13px] font-bold">
-                    Chemical Spill - Sector 9
+          <div className="space-y-3">
+            {assignedTasks.map((task) => (
+              <div
+                key={task.id}
+                className="bento-card bg-white p-5 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-4 hover:border-blue-200 transition-all cursor-pointer group"
+              >
+                <div
+                  className={`w-12 h-12 ${task.bgColor} rounded-2xl flex items-center justify-center border border-transparent group-hover:border-blue-100`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-6 w-6 ${task.iconColor}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-grow">
+                  <div className="flex justify-between items-start">
+                    <h4 className="text-sm font-extrabold text-slate-800">
+                      {task.title}
+                    </h4>
+                    <span className="text-[8px] font-black text-slate-400 uppercase">
+                      {task.time}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 font-bold mb-1">
+                    {task.location}
                   </p>
-                  <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">
-                    Urgent Priority
+                  <span
+                    className={`text-[8px] font-black px-2 py-0.5 rounded-md uppercase tracking-tighter ${
+                      task.priority === "High"
+                        ? "bg-red-50 text-red-500"
+                        : "bg-blue-50 text-blue-500"
+                    }`}
+                  >
+                    {task.priority} Priority
                   </span>
                 </div>
-                <div className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_10px_#2563eb]"></div>
+                <div className="text-slate-300 group-hover:text-blue-500 transition-colors">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
-
-        {/* Report Fix Button */}
-        <button
-          onClick={() => (window.location.href = "/staff/report-fix")}
-          className="w-full py-5 bg-blue-600 text-white font-extrabold rounded-[2.5rem] shadow-xl shadow-blue-100 hover:bg-blue-700 active:scale-[0.98] transition-all text-lg tracking-tight flex items-center justify-center gap-3"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2.5"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-          REPORT FIX
-        </button>
 
         {/* Completed Today List */}
         <div className="space-y-4 pt-2">

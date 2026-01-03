@@ -5,6 +5,8 @@ import "leaflet/dist/leaflet.css";
 
 export default function IssueReport() {
   const [imagePreview, setImagePreview] = useState(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,39 +25,32 @@ export default function IssueReport() {
 
   useEffect(() => {
     if (!mapInstance.current && mapContainer.current) {
-      // Initialize Map
       const map = L.map(mapContainer.current, { zoomControl: false }).setView(
         [20.5937, 78.9629],
         5
       );
       L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
       ).addTo(map);
       const marker = L.marker([20.5937, 78.9629], { draggable: true }).addTo(
         map
       );
-
       marker.on("dragend", () => {
         const { lat, lng } = marker.getLatLng();
         setLat(lat.toFixed(6));
         setLng(lng.toFixed(6));
       });
-
       mapInstance.current = map;
       markerInstance.current = marker;
     }
   }, []);
 
-  const triggerInput = (type) => {
-    if (type === "camera") cameraInput.current.click();
-    else fileInput.current.click();
-  };
+  const triggerInput = (type) =>
+    type === "camera" ? cameraInput.current.click() : fileInput.current.click();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    }
+    if (file) setImagePreview(URL.createObjectURL(file));
   };
 
   const getLocation = () => {
@@ -72,199 +67,202 @@ export default function IssueReport() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!imagePreview) {
-      setModal({
-        active: true,
-        title: "Error",
-        msg: "Please provide a photo.",
-        isError: true,
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setModal({
-        active: true,
-        title: "Success!",
-        msg: "Report submitted successfully.",
-        isError: false,
-      });
-    }, 1500);
-  };
-
   return (
-    <div className="flex flex-col items-center w-full">
-      <Navbar title="Report Issue" showBack={true} />
+    <div className="flex flex-col items-center w-full min-h-screen bg-[#F8FAFC]">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em; }
+        .bento-input { transition: all 0.2s ease; border: 1px solid #E2E8F0; background: #FFFFFF; }
+        .bento-input:focus-within { border-color: #6366F1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+      `}</style>
 
-      <main className="p-6 w-full max-w-md space-y-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bento-card bg-white p-5 rounded-[2.5rem] shadow-sm border border-slate-100">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="bg-emerald-100 text-emerald-600 p-2 rounded-lg text-xs font-bold uppercase tracking-tighter">
-                Photo
-              </span>
-              <h3 className="text-sm font-bold text-slate-700 tracking-wide">
-                Visual Evidence
-              </h3>
-            </div>
+      <Navbar title="New Report" showBack={true} />
 
-            {imagePreview && (
-              <div className="mb-4 rounded-3xl overflow-hidden ring-4 ring-slate-50">
-                <img
-                  src={imagePreview}
-                  className="w-full h-48 object-cover"
-                  alt="Preview"
-                />
-              </div>
-            )}
-
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => triggerInput("camera")}
-                className="w-full py-3 px-5 bg-emerald-50 text-emerald-700 rounded-2xl font-bold flex items-center justify-between border border-emerald-100 hover:bg-emerald-500 hover:text-white transition-all group"
-              >
-                <span className="text-sm">Open Camera</span>
-                {/* Icons... */}
-                <div className="p-2 bg-white rounded-xl shadow-sm group-hover:bg-emerald-400 transition-colors">
-                  📸
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => triggerInput("upload")}
-                className="w-full py-3 px-5 bg-slate-50 text-slate-600 rounded-2xl font-bold flex items-center justify-between border border-slate-200 hover:bg-slate-200 transition-all group"
-              >
-                <span className="text-sm">Upload from Gallery</span>
-                <div className="p-2 bg-white rounded-xl shadow-sm group-hover:bg-slate-300 transition-colors">
-                  📂
-                </div>
-              </button>
-            </div>
-
-            <input
-              type="file"
-              ref={cameraInput}
-              accept="image/*"
-              capture="environment"
-              className="hidden"
-              onChange={handleFileChange}
-            />
-            <input
-              type="file"
-              ref={fileInput}
-              accept="image/*"
-              className="hidden"
-              onChange={handleFileChange}
-            />
+      <main className="p-6 w-full max-w-md space-y-10 pb-32">
+        {/* 1. TEXT DETAILS SECTION */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 px-1">
+            <div className="w-1.5 h-6 bg-indigo-600 rounded-full" />
+            <h2 className="text-xl font-extrabold text-slate-800">
+              Issue Details
+            </h2>
           </div>
 
-          <div className="bento-card bg-white p-5 rounded-[2.5rem] shadow-sm border border-slate-100">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="bg-blue-100 text-blue-600 p-2 rounded-lg text-xs font-bold uppercase tracking-tighter">
-                Info
-              </span>
-              <h3 className="text-sm font-bold text-slate-700 tracking-wide">
-                Report Details
-              </h3>
+          <div className="space-y-3">
+            <div className="bento-input rounded-[1.5rem] p-4">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">
+                Subject Title
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Broken Street Light"
+                className="w-full bg-transparent outline-none text-slate-700 font-bold placeholder:text-slate-300"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
-            <textarea
-              rows="3"
-              required
-              placeholder="Describe the issue..."
-              className="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm transition-all"
-            ></textarea>
+
+            <div className="bento-input rounded-[1.5rem] p-4">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">
+                Description
+              </label>
+              <textarea
+                rows="3"
+                placeholder="Briefly describe the situation..."
+                className="w-full bg-transparent outline-none text-slate-700 font-medium text-sm placeholder:text-slate-300 resize-none"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 2. LOCATION SECTION */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 px-1">
+            <div className="w-1.5 h-6 bg-rose-500 rounded-full" />
+            <h2 className="text-xl font-extrabold text-slate-800">
+              Incident Location
+            </h2>
           </div>
 
-          <div className="bento-card bg-slate-900 p-5 rounded-[2.5rem] shadow-xl text-white">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="bg-slate-800 text-slate-400 p-2 rounded-lg text-xs font-bold uppercase tracking-tighter">
-                GPS
-              </span>
-              <h3 className="text-sm font-bold text-slate-300 tracking-wide">
-                Issue Location
-              </h3>
-            </div>
+          <div className="bg-white rounded-[2rem] p-3 shadow-sm border border-slate-100">
             <div
               ref={mapContainer}
-              style={{ height: "220px", borderRadius: "24px", zIndex: 1 }}
-            ></div>
-            <div className="flex gap-2 mt-4">
-              <input
-                type="number"
-                step="any"
-                placeholder="Lat"
-                value={lat}
-                readOnly
-                className="bg-slate-800 border-none rounded-xl p-3 w-full text-xs text-emerald-400 font-mono"
-              />
-              <input
-                type="number"
-                step="any"
-                placeholder="Lng"
-                value={lng}
-                readOnly
-                className="bg-slate-800 border-none rounded-xl p-3 w-full text-xs text-emerald-400 font-mono"
-              />
+              className="h-44 rounded-[1.5rem] z-0 overflow-hidden"
+            />
+            <div className="flex items-center justify-between mt-3 px-1">
+              <div className="flex gap-4">
+                <div>
+                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                    Lat
+                  </p>
+                  <p className="text-[11px] font-mono font-bold text-slate-600">
+                    {lat || "---"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                    Lng
+                  </p>
+                  <p className="text-[11px] font-mono font-bold text-slate-600">
+                    {lng || "---"}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={getLocation}
+                className="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-indigo-600 transition-colors active:scale-90"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.5"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.5"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={getLocation}
-              className="mt-3 w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold rounded-xl transition-all shadow-lg active:scale-95"
-            >
-              📍 Pin My Location
-            </button>
+          </div>
+        </section>
+
+        {/* 3. IMAGES SECTION */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 px-1">
+            <div className="w-1.5 h-6 bg-emerald-500 rounded-full" />
+            <h2 className="text-xl font-extrabold text-slate-800">
+              Visual Evidence
+            </h2>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-5 bg-emerald-600 text-white font-extrabold rounded-[2rem] shadow-2xl shadow-emerald-200 hover:bg-emerald-700 active:scale-[0.97] transition-all text-lg tracking-tight"
-          >
-            {isSubmitting ? "Processing..." : "SUBMIT REPORT"}
+          <div className="bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm">
+            {imagePreview ? (
+              <div className="relative rounded-[1.5rem] overflow-hidden aspect-video">
+                <img
+                  src={imagePreview}
+                  className="w-full h-full object-cover"
+                  alt="preview"
+                />
+                <button
+                  onClick={() => setImagePreview(null)}
+                  className="absolute top-2 right-2 bg-white/90 backdrop-blur text-red-500 p-2 rounded-full shadow-lg"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="3"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => triggerInput("camera")}
+                  className="flex flex-col items-center justify-center py-8 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100 transition-all"
+                >
+                  <span className="text-2xl mb-1">📸</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    Camera
+                  </span>
+                </button>
+                <button
+                  onClick={() => triggerInput("upload")}
+                  className="flex flex-col items-center justify-center py-8 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 transition-all"
+                >
+                  <span className="text-2xl mb-1">📂</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    Gallery
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* FLOATING SUBMIT BUTTON */}
+        <div className="fixed bottom-8 left-0 right-0 px-6 max-w-md mx-auto z-[50]">
+          <button className="w-full py-5 bg-slate-900 text-white rounded-[1.75rem] font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:bg-indigo-600 active:scale-[0.98] transition-all">
+            Upload Report
           </button>
-        </form>
+        </div>
       </main>
 
-      {/* Modal */}
-      {modal.active && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-6 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[3rem] p-10 max-w-sm w-full relative shadow-2xl text-center">
-            <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 rotate-12">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="3"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-extrabold text-slate-800 mb-2">
-              {modal.title}
-            </h2>
-            <p className="text-slate-500 mb-8">{modal.msg}</p>
-            <button
-              onClick={() => setModal({ ...modal, active: false })}
-              className="w-full py-4 bg-slate-900 text-white font-bold rounded-2xl"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
+      <input
+        type="file"
+        ref={cameraInput}
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      <input
+        type="file"
+        ref={fileInput}
+        accept="image/*"
+        className="hidden"
+        onChange={handleFileChange}
+      />
     </div>
   );
 }

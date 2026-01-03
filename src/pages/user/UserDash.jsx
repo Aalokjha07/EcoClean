@@ -81,7 +81,9 @@ export default function UserDash() {
         <Link
           to="/user/report-issue"
           className="block w-full text-center py-5 bg-emerald-600 text-white font-extrabold rounded-[2.5rem] shadow-2xl shadow-emerald-200 hover:bg-emerald-700 active:scale-[0.97] transition-all text-lg tracking-tight"
-        ></Link>
+        >
+          Report
+        </Link>
 
         <div className="space-y-4 pt-2">
           <div className="flex items-center justify-between px-4">
